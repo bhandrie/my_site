@@ -4,7 +4,7 @@ import os
 from werkzeug.utils import secure_filename, send_from_directory
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')  // Directory to save uploaded files
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')  //Directory to save uploaded files, test2
 
 
 
