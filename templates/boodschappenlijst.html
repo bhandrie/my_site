@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Bullet Points</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/static/main.css" />
+  </head>
+  <body>
+
+    <h1>boodschappenlijst</h1>
+
+
+
+
+    <form method="POST">
+      <label>
+        <span>Bullet Point:</span>
+        <input type="text" name="boodschapitem" required />
+      </label>
+
+      <button type="submit">Add</button>
+    </form>
+
+    <ul>
+
+      {% for rowid, boodschapitem in boodschappenlijst %}
+
+
+      <li>{{ boodschapitem }} <a href="{{ url_for('delete_boodschappenlijst', index=rowid) }}">Delete</a></li>
+      {% endfor %}
+    </ul>
+
+  </body>
+</html>

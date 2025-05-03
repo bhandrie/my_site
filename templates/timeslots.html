@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Time Slot Selection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      font-size: 18px;
+    }
+    h2 {
+      font-size: 24px;
+    }
+    label {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
+    }
+    input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      margin-right: 10px;
+    }
+    button {
+      font-size: 20px;
+      padding: 10px 20px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Select Time Slots (10:00 – 18:00)</h2>
+  <form method="POST">
+    {% for slot in all_slots %}
+      <div>
+        <label>
+          <input type="checkbox" name="timeslot" value="{{ slot }}" {% if slot in saved %}checked{% endif %}>
+          {{ slot }}
+        </label>
+      </div>
+    {% endfor %}
+    <button type="submit">Save</button>
+  </form>
+</body>
+</html>

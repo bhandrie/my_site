@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+  <head>
+    <title>long term goals</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/static/main.css" />
+  </head>
+  <body>
+    <h1>long term goals</h1>
+
+
+    <form method="POST">
+      <label>
+        <span>Bullet Point:</span>
+        <input type="text" name="goal" required />
+      </label>
+
+      <button type="submit">Add</button>
+    </form>
+
+    <ul>
+      {% for rowid, goal in long_term_goals %}
+      <li>{{ goal }} <a href="{{ url_for('delete_long_term_goal', index=rowid) }}">Delete</a></li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Bullet Points</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/static/main.css" />
+  </head>
+  <body>
+        <form action = "/success" method = "post" enctype="multipart/form-data">  
+          <input type="file" name="file" />
+          <input type = "submit" value="Upload">
+        </form>
+
+    <a href="{{ url_for('long_term_goals') }}">Long-term health Goals</a><br>
+    <a href="{{ url_for('projecten') }}">projecten</a><br>
+    <a href="{{ url_for('boodschappenlijst') }}">boodschappenlijst</a><br>
+    <a href="{{ url_for('job_doelen') }}">job projecten</a>
+
+
+    <h2>Short-term Tasks</h2>
+    <form method="POST" action="{{ url_for('add_short_term_task') }}">
+      <label>
+        <input type="text" name="bullet" required />
+      </label>
+      <button type="submit">Add</button>
+    </form>
+
+      <ul>
+        {% for rowid, bullet in short_term_tasks %}
+        <li>{{ bullet }} <a href="{{ url_for('delete_bullet_point', index=rowid) }}">Delete</a></li>
+        {% endfor %}
+      </ul>
+
+    <h2 class="section-title">Long-term Tasks</h2>
+    <form method="POST" action="{{ url_for('add_long_term_task') }}">
+      <label>
+        <input type="text" name="bullet" required />
+      </label>
+      <button type="submit">Add</button>
+    </form>
+
+      <ul>
+        {% for rowid, bullet in long_term_tasks %}
+        <li>{{ bullet }} <a href="{{ url_for('delete_bullet_point', index=rowid) }}">Delete</a></li>
+        {% endfor %}
+      </ul>
+
+
+<p> <h2>Uploaded Files</h2></p>
+<ul>
+    {% for file in files%}
+        <li>{{ file }}</a></li>
+        {% endfor %}
+</ul>
+
+  </body>
+</html>
