@@ -3,8 +3,8 @@ import sqlite3
 import os
 from werkzeug.utils import secure_filename, send_from_directory
 
-UPLOAD_FOLDER = '/home/bhandrie/mysite/uploads'
-
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')  // Directory to save uploaded files
 
 
 
@@ -31,8 +31,6 @@ def before_request():
 
     cursor.execute('CREATE TABLE IF NOT EXISTS boodschappenlijst (boodschapitem text)')
     cursor.execute('CREATE TABLE IF NOT EXISTS job_doelen (job_doel text)')
-
-
 
     # table for time slot selections
     cursor.execute('CREATE TABLE IF NOT EXISTS timeslots (slot TEXT PRIMARY KEY, selected INTEGER)')
