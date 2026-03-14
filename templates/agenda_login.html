@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Agenda Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/main.css" />
+  </head>
+  <body>
+    <h1>Agenda Access</h1>
+    {% if error %}
+      <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <form method="POST">
+      <p>Please enter the password to access the agenda:</p>
+      <input type="password" name="password" required autofocus />
+      <button type="submit">Unlock</button>
+    </form>
+    <p><a href="{{ url_for('index') }}">Back to index</a></p>
+  </body>
+</html>

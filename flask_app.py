@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, send_file, send_from_directory
+from flask import Flask, request, render_template, redirect, url_for, send_file, send_from_directory, session
 import sqlite3
 import os
 from werkzeug.utils import secure_filename
@@ -11,6 +11,9 @@ AGENDA_FOLDER = os.path.join(BASE_DIR, 'agenda')  # Directory for agenda images
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_COOKIE_NAME'] = 'agenda_session'
+app.secret_key = 'bullet-points-secret-key-456'
 
 @app.before_request
 def before_request():
@@ -217,8 +220,24 @@ def delete_job_doelen(index):
     return redirect(url_for('job_doelen'))
 
 
-@app.route('/agenda')
+@app.route('/logout_agenda')
+def logout_agenda():
+    session.pop('agenda_auth', None)
+    return redirect(url_for('index'))
+
+@app.route('/agenda', methods=['GET', 'POST'])
 def agenda():
+    if request.method == 'POST':
+        if request.form.get('password') == 'test123':
+            session.permanent = False
+            session['agenda_auth'] = True
+            return redirect(url_for('agenda'))
+        else:
+            return render_template('agenda_login.html', error="Incorrect password")
+
+    if not session.get('agenda_auth'):
+        return render_template('agenda_login.html')
+
     if not os.path.exists(AGENDA_FOLDER):
         os.makedirs(AGENDA_FOLDER)
     files = [f for f in os.listdir(AGENDA_FOLDER) if f.lower().endswith('.png')]
@@ -228,10 +247,14 @@ def agenda():
 
 @app.route('/agenda_image/<filename>')
 def serve_agenda_image(filename):
+    if not session.get('agenda_auth'):
+        return "Unauthorized", 401
     return send_from_directory(AGENDA_FOLDER, filename)
 
 @app.route('/delete_agenda_image/<filename>')
 def delete_agenda_image(filename):
+    if not session.get('agenda_auth'):
+        return "Unauthorized", 401
     file_path = os.path.join(AGENDA_FOLDER, filename)
     if os.path.exists(file_path):
         os.remove(file_path)
@@ -239,6 +262,8 @@ def delete_agenda_image(filename):
 
 @app.route('/agenda_image')
 def agenda_image():
+    if not session.get('agenda_auth'):
+        return "Unauthorized", 401
     agenda_dir = os.path.join(BASE_DIR, 'agenda')
     if not os.path.exists(agenda_dir):
         return "Agenda folder not found", 404
@@ -251,6 +276,8 @@ def agenda_image():
 
 @app.route('/upload_agenda', methods=['POST'])
 def upload_agenda():
+    if not session.get('agenda_auth'):
+        return "Unauthorized", 401
     if request.method == 'POST':
         if 'file' not in request.files:
             return redirect(url_for('index'))

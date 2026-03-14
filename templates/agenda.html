@@ -7,7 +7,7 @@
   </head>
   <body>
     <h1>Agenda</h1>
-    <p><a href="{{ url_for('index') }}">Back to index</a></p>
+    <p><a href="{{ url_for('index') }}">Back to index</a> | <a href="{{ url_for('logout_agenda') }}">Logout</a></p>
     <div>
       {% for filename in agenda_files %}
       <div style="margin-bottom: 20px;">
