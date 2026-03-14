@@ -1,10 +1,10 @@
-from flask import Flask, request, render_template, redirect, url_for, send_file
+from flask import Flask, request, render_template, redirect, url_for, send_file, send_from_directory
 import sqlite3
 import os
-from werkzeug.utils import secure_filename, send_from_directory
+from werkzeug.utils import secure_filename
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')  //Directory to save uploaded files, test2
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')  # Directory to save uploaded files, test2
 
 
 
@@ -214,6 +214,22 @@ def delete_job_doelen(index):
     request.conn.commit()
 
     return redirect(url_for('job_doelen'))
+
+
+@app.route('/agenda')
+def agenda():
+    return render_template('agenda.html')
+
+@app.route('/agenda_image')
+def agenda_image():
+    agenda_dir = os.path.join(BASE_DIR, 'agenda')
+    if not os.path.exists(agenda_dir):
+        return "Agenda folder not found", 404
+    files = [f for f in os.listdir(agenda_dir) if f.lower().endswith('.png')]
+    if files:
+        files.sort(reverse=True)
+        return send_from_directory(agenda_dir, files[0])
+    return "No image found", 404
 
 
 @app.route('/success', methods=['POST'])

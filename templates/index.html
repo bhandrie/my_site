@@ -15,7 +15,8 @@
     <a href="{{ url_for('long_term_goals') }}">Long-term health Goals</a><br>
     <a href="{{ url_for('projecten') }}">projecten</a><br>
     <a href="{{ url_for('boodschappenlijst') }}">boodschappenlijst</a><br>
-    <a href="{{ url_for('job_doelen') }}">job projecten</a>
+    <a href="{{ url_for('job_doelen') }}">job projecten</a><br>
+    <a href="{{ url_for('agenda') }}">agenda</a>
 
 
     <h2>Short-term Tasks</h2>
@@ -47,10 +48,10 @@
       </ul>
 
 
-<p> <h2>Uploaded Files</h2></p>
+<h2>Uploaded Files</h2>
 <ul>
     {% for file in files%}
-        <li>{{ file }}</a></li>
+        <li>{{ file }}</li>
         {% endfor %}
 </ul>
 
