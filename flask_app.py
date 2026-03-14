@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')  # Directory to save uploaded files, test2
+AGENDA_FOLDER = os.path.join(BASE_DIR, 'agenda')  # Directory for agenda images
 
 
 
@@ -218,7 +219,23 @@ def delete_job_doelen(index):
 
 @app.route('/agenda')
 def agenda():
-    return render_template('agenda.html')
+    if not os.path.exists(AGENDA_FOLDER):
+        os.makedirs(AGENDA_FOLDER)
+    files = [f for f in os.listdir(AGENDA_FOLDER) if f.lower().endswith('.png')]
+    # Sort by modification time: oldest first
+    files.sort(key=lambda x: os.path.getmtime(os.path.join(AGENDA_FOLDER, x)))
+    return render_template('agenda.html', agenda_files=files)
+
+@app.route('/agenda_image/<filename>')
+def serve_agenda_image(filename):
+    return send_from_directory(AGENDA_FOLDER, filename)
+
+@app.route('/delete_agenda_image/<filename>')
+def delete_agenda_image(filename):
+    file_path = os.path.join(AGENDA_FOLDER, filename)
+    if os.path.exists(file_path):
+        os.remove(file_path)
+    return redirect(url_for('agenda'))
 
 @app.route('/agenda_image')
 def agenda_image():
@@ -230,6 +247,24 @@ def agenda_image():
         files.sort(reverse=True)
         return send_from_directory(agenda_dir, files[0])
     return "No image found", 404
+
+
+@app.route('/upload_agenda', methods=['POST'])
+def upload_agenda():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(url_for('index'))
+        f = request.files['file']
+        if f.filename == '':
+            return redirect(url_for('index'))
+        
+        if f and f.filename.lower().endswith('.png'):
+            import datetime
+            timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+            filename = f"image-{timestamp}.png"
+            f.save(os.path.join(AGENDA_FOLDER, filename))
+    
+    return redirect(url_for('index'))
 
 
 @app.route('/success', methods=['POST'])

@@ -9,7 +9,14 @@
     <h1>Agenda</h1>
     <p><a href="{{ url_for('index') }}">Back to index</a></p>
     <div>
-      <img src="{{ url_for('agenda_image') }}" alt="Agenda Image" style="max-width: 100%;">
+      {% for filename in agenda_files %}
+      <div style="margin-bottom: 20px;">
+        <p>{{ filename }}</p>
+        <img src="{{ url_for('serve_agenda_image', filename=filename) }}" alt="Agenda Image - {{ filename }}" style="max-width: 100%;">
+        <br>
+        <a href="{{ url_for('delete_agenda_image', filename=filename) }}">Delete Image</a>
+      </div>
+      {% endfor %}
     </div>
   </body>
 </html>
